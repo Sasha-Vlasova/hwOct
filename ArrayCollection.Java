@@ -1,21 +1,24 @@
 public class ArrayCollection<T> implements CollectionInterface<T> {
-    protected final int DEFCAP = 100;
-    protected T[] elements; 
-    protected int numElements = 0; 
+    protected final int DEFCAP = 100; // default capacity
+    protected T[] elements; // array to hold collection's elements
+    protected int numElements = 0; // number of elements in the collection
    
     //Used by our find method
-    protected boolean found; 
-    protected int location; 
+    protected boolean found;  // true if target found, otherwise false
+    protected int location;  // indicates location of target if found
     
     
-    public ArrayCollection() {
+    public ArrayCollection() 
+    {
         elements = (T[]) new Object[DEFCAP];
     }
 
-    public ArrayCollection(int capacity) {
+    public ArrayCollection(int capacity) 
+    {
         elements = (T[]) new Object[capacity];
     }
-    protected void find(T target) {
+    protected void find(T target) 
+    {
         // Searches elements for an occurrence of an element e such that
         // e.equals(target). If successful, sets instance variables found to true
         // and location to the index of e. If not successful, sets found to false.
@@ -31,7 +34,7 @@ public class ArrayCollection<T> implements CollectionInterface<T> {
         }
     }
     private void enlarge() {
-        T[] larger = (T[]) new Object[elements.length * 2];
+        T[] larger = (T[]) new Object[elements.length * 2]; // double size
         for (int i = 0; i < numElements; i++) {
             larger[i] = elements[i];
         }
@@ -39,14 +42,23 @@ public class ArrayCollection<T> implements CollectionInterface<T> {
     }
 
 
-    public boolean add(T element) {
+    public boolean add(T element) 
+    {
         // Precondition: //
         // Adds element to this collection.
+        
+
         if (numElements == elements.length)
             enlarge();
+        
+        if (isFull()) // i had to move it after checking for enlarge, otherwise it causes print of 100 - always
+            return false;
+            
         find(element); // sets location to index where element belongs
+        
         for (int index = numElements; index > location; index--)
             elements[index] = elements[index - 1];
+
         elements[location] = element;
         numElements++;
         return true;
